@@ -40,15 +40,18 @@ public class CustomUserDetails extends UserInfo implements UserDetails {
         return authorities;
    }
 
+    @Override
+    public String getUsername() {
+        return username;
+    }
+
+
    @Override
    public String getPassword() {
         return password;
    }
 
-   @Override
-   public String getUsername() {
-        return username;
-   }
+
 
    @Override
    public boolean isAccountNonExpired() {
