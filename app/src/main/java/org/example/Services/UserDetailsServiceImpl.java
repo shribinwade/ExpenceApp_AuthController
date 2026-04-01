@@ -1,6 +1,8 @@
 package org.example.Services;
 
+import org.example.Exception.custom.ValidationException;
 import org.example.Repository.UserRepository;
+import org.example.Utils.ValidationUtil;
 import org.example.entities.UserInfo;
 import org.example.models.UserInfoDTO;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -8,7 +10,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.Optional;
+import java.util.*;
 
 public class UserDetailsServiceImpl implements UserDetailsService {
 
@@ -17,9 +19,12 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     private final PasswordEncoder passwordEncoder;
 
-    public UserDetailsServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    private final ValidationUtil validationUtil;
+
+    public UserDetailsServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, ValidationUtil validationUtil) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.validationUtil = validationUtil;
     }
 
     @Override
@@ -39,7 +44,23 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     }
 
     public Boolean signupUser(UserInfoDTO userInfoDTo){
+        //Define a function to check if userEmail,password is correct
+        //we need to check validation
+        List<String> errors = validationUtil.validateUser(userInfoDTo);
+        if(!errors.isEmpty()){
+          // errors exist -> stop flow
+            throw new ValidationException(errors);
+        }
 
+
+        userInfoDTo.setPassword(passwordEncoder.encode(userInfoDTo.getPassword()));
+        if(Objects.nonNull(checkIfUserAlreadyExists(userInfoDTo))){
+            return false;
+        }
+        String userId = UUID.randomUUID().toString();
+        userRepository.save(new UserInfo(userId,userInfoDTo.getUsername(),
+                userInfoDTo.getPassword(), new HashSet<>()));
+        return true;
     }
 
 
