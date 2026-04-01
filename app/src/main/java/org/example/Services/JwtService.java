@@ -63,7 +63,6 @@ public class JwtService {
                .build()
                .parseClaimsJws(token)
                .getBody();
-
     }
 
     //Decodeing Secret

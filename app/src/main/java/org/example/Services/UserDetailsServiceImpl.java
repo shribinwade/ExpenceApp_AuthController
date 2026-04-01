@@ -5,6 +5,7 @@ import org.example.Repository.UserRepository;
 import org.example.Utils.ValidationUtil;
 import org.example.entities.UserInfo;
 import org.example.models.UserInfoDTO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -16,15 +17,13 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
 
     private final UserRepository userRepository;
-
+    private final ValidationUtil validationUtil;
     private final PasswordEncoder passwordEncoder;
 
-    private final ValidationUtil validationUtil;
-
-    public UserDetailsServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, ValidationUtil validationUtil) {
+    public UserDetailsServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder,  ValidationUtil validationUtil) {
         this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
         this.validationUtil = validationUtil;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -51,7 +50,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
           // errors exist -> stop flow
             throw new ValidationException(errors);
         }
-
 
         userInfoDTo.setPassword(passwordEncoder.encode(userInfoDTo.getPassword()));
         if(Objects.nonNull(checkIfUserAlreadyExists(userInfoDTo))){
