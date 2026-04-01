@@ -42,8 +42,13 @@ dependencies {
     compileOnly group: 'org.projectlombok', name: 'lombok', version: lombokVersion
     annotationProcessor group: 'org.projectlombok', name: 'lombok', version: lombokVersion
 
-    // MySQL
-    implementation group: 'com.mysql', name: 'mysql-connector-j', version: mysqlVersion
+//    // MySQL
+//    implementation group: 'com.mysql', name: 'mysql-connector-j', version: mysqlVersion
+
+
+    // ✅ PostgreSQL (replaces MySQL)
+    runtimeOnly 'org.postgresql:postgresql'
+
 
     // JWT (all SAME version)
     implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: jwtVersion
