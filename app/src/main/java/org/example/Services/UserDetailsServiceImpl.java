@@ -4,6 +4,7 @@ import org.example.Exception.custom.ValidationException;
 import org.example.Repository.UserRepository;
 import org.example.Utils.ValidationUtil;
 import org.example.entities.UserInfo;
+import org.example.eventProducer.UserInfoProducer;
 import org.example.models.UserInfoDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,12 +22,16 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     private final UserRepository userRepository;
     private final ValidationUtil validationUtil;
     private final PasswordEncoder passwordEncoder;
+    private final UserInfoProducer userInfoProducer;
 
-    public UserDetailsServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder,  ValidationUtil validationUtil) {
+    public UserDetailsServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder,  ValidationUtil validationUtil,UserInfoProducer userInfoProducer) {
         this.userRepository = userRepository;
         this.validationUtil = validationUtil;
         this.passwordEncoder = passwordEncoder;
+        this.userInfoProducer = userInfoProducer;
     }
+
+
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -38,9 +43,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         return new CustomUserDetails(user.get());
     }
 
-    public UserInfo checkIfUserAlreadyExists(UserInfoDTO userInfoDTO){
-       return userRepository.findByUsername(userInfoDTO.getUsername())
-               .orElseThrow(()-> new UsernameNotFoundException("user not already Exists"));
+    public Optional<UserInfo> checkIfUserAlreadyExists(UserInfoDTO userInfoDTO){
+       return userRepository.findByUsername(userInfoDTO.getUsername());
 
     }
 
@@ -54,12 +58,14 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         }
 
         userInfoDTo.setPassword(passwordEncoder.encode(userInfoDTo.getPassword()));
-        if(Objects.nonNull(checkIfUserAlreadyExists(userInfoDTo))){
+        if(checkIfUserAlreadyExists(userInfoDTo).isPresent()){
             return false;
         }
         String userId = UUID.randomUUID().toString();
         userRepository.save(new UserInfo(userId,userInfoDTo.getUsername(),
                 userInfoDTo.getPassword(), new HashSet<>()));
+        // pushEventToQueue
+        userInfoProducer.sendEventToKafka(userInfoDTo);
         return true;
     }
 

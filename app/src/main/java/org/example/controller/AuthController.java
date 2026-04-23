@@ -20,6 +20,7 @@ public class AuthController {
     private RefreshTokenService refreshTokenService;
     private UserDetailsServiceImpl userDetailsServiceImpl;
 
+
     public AuthController(JwtService jwtService, RefreshTokenService refreshTokenService, UserDetailsServiceImpl userDetailsServiceImpl) {
         this.jwtService = jwtService;
         this.refreshTokenService = refreshTokenService;

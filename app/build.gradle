@@ -38,6 +38,9 @@ dependencies {
 
     implementation "org.modelmapper:modelmapper:3.1.1"
 
+    //kafka dependecies
+    implementation "org.springframework.kafka:spring-kafka"
+
     // Lombok
     compileOnly group: 'org.projectlombok', name: 'lombok', version: lombokVersion
     annotationProcessor group: 'org.projectlombok', name: 'lombok', version: lombokVersion

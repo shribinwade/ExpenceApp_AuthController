@@ -4,6 +4,7 @@ import lombok.Data;
 import org.example.Repository.UserRepository;
 import org.example.Services.UserDetailsServiceImpl;
 import org.example.Utils.ValidationUtil;
+import org.example.eventProducer.UserInfoProducer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,16 +31,18 @@ public class SecurityConfig {
     private final PasswordEncoder passwordEncoder;
     private final UserDetailsServiceImpl userDetailsServiceImpl;
     private final ValidationUtil validationUtil;
+    private final UserInfoProducer userInfoProducer;
 
-    public SecurityConfig(UserDetailsServiceImpl userDetailsServiceImpl, PasswordEncoder passwordEncoder,ValidationUtil validationUtil) {
+    public SecurityConfig(UserDetailsServiceImpl userDetailsServiceImpl, PasswordEncoder passwordEncoder,ValidationUtil validationUtil, UserInfoProducer userInfoProducer) {
         this.userDetailsServiceImpl = userDetailsServiceImpl;
         this.validationUtil = validationUtil;
         this.passwordEncoder = passwordEncoder;
+        this.userInfoProducer = userInfoProducer;
     }
 
     @Bean
-    public UserDetailsService userDetailsService(UserRepository userRepository, PasswordEncoder passwordEncoder,ValidationUtil validationUtil){
-        return new UserDetailsServiceImpl(userRepository,passwordEncoder,validationUtil);
+    public UserDetailsService userDetailsService(UserRepository userRepository, PasswordEncoder passwordEncoder,ValidationUtil validationUtil, UserInfoProducer userInfoProducer){
+        return new UserDetailsServiceImpl(userRepository,passwordEncoder,validationUtil,userInfoProducer);
     }
 
     @Bean

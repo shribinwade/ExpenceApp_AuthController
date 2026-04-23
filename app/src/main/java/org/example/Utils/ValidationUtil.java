@@ -30,7 +30,7 @@ public class ValidationUtil {
        addError(errors,validateField(userInfoDTO, UserInfoDTO::getEmail,EMAIL_PATTERN,"Invalid Email"));
        addError(errors, validateField(userInfoDTO, UserInfoDTO::getPassword, PASSWORD_PATTERN, "Invalid Password"));
        addError(errors, validateField(userInfoDTO, UserInfoDTO::getPhoneNumber, PHONE_PATTERN, "Invalid Phone"));
-       addError(errors, validateField(userInfoDTO, UserInfoDTO::getUserName, NAME_PATTERN, "Invalid Name"));
+       addError(errors, validateField(userInfoDTO, UserInfoDTO::getUsername, NAME_PATTERN, "Invalid Name"));
        return errors;
     }
 
