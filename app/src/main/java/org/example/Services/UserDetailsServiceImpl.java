@@ -4,6 +4,7 @@ import org.example.Exception.custom.ValidationException;
 import org.example.Repository.UserRepository;
 import org.example.Utils.ValidationUtil;
 import org.example.entities.UserInfo;
+import org.example.eventProducer.UserInfoEvent;
 import org.example.eventProducer.UserInfoProducer;
 import org.example.models.UserInfoDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,12 +63,24 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             return false;
         }
         String userId = UUID.randomUUID().toString();
-        userRepository.save(new UserInfo(userId,userInfoDTo.getUsername(),
-                userInfoDTo.getPassword(), new HashSet<>()));
+        UserInfo userInfo = new UserInfo(userId, userInfoDTo.getUsername(),
+                userInfoDTo.getPassword(), new HashSet<>());
+        userRepository.save(userInfo);
         // pushEventToQueue
-        userInfoProducer.sendEventToKafka(userInfoDTo);
+        userInfoProducer.sendEventToKafka(userInfoEventToPublish(userInfoDTo,userId));
         return true;
     }
+
+    private UserInfoEvent userInfoEventToPublish(UserInfoDTO userInfoDTO, String userId){
+         return UserInfoEvent.builder()
+                 .userId(userId)
+                 .firstName(userInfoDTO.getFirstName())
+                 .lastName(userInfoDTO.getLastName())
+                 .email(userInfoDTO.getEmail())
+                 .phoneNumber(Long.valueOf(userInfoDTO.getPhoneNumber()))
+                 .build();
+    }
+
 
 
 }

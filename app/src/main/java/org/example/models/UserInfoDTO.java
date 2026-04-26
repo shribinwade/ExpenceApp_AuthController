@@ -10,9 +10,10 @@ import org.example.entities.UserInfo;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class UserInfoDTO extends UserInfo {
-    private String firstName;
-    private String lastName;
+    private String firstName; //first_name
+    private String lastName; //last_name
     private String email;
-    private String phoneNumber;
+    private String phoneNumber; //phone_number
 }
