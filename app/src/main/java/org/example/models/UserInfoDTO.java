@@ -12,8 +12,13 @@ import org.example.entities.UserInfo;
 @Builder
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class UserInfoDTO extends UserInfo {
+
+    @NonNull
     private String firstName; //first_name
+    @NonNull
     private String lastName; //last_name
+    @NonNull
     private String email;
+    @NonNull
     private String phoneNumber; //phone_number
 }
