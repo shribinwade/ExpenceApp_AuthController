@@ -7,7 +7,7 @@
         <processorPath useClasspath="false">
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.projectlombok/lombok/1.18.32/17d46b3e205515e1e8efd3ee4d57ce8018914163/lombok-1.18.32.jar" />
         </processorPath>
-        <module name="userservice.main" />
+        <module name="AuthService.app.main" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel target="21" />
@@ -17,6 +17,11 @@
       <module name="AuthService.app" options="-parameters" />
       <module name="AuthService.app.main" options="-parameters" />
       <module name="AuthService.app.test" options="-parameters" />
+      <module name="expenseservice" options="-parameters" />
+      <module name="expenseservice.main" options="-parameters" />
+      <module name="expenseservice.test" options="-parameters" />
+      <module name="service.main" options="-parameters" />
+      <module name="service.test" options="-parameters" />
       <module name="userservice" options="-parameters" />
       <module name="userservice.main" options="-parameters" />
       <module name="userservice.test" options="-parameters" />
