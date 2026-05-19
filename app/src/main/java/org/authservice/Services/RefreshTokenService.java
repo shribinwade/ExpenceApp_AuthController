@@ -27,11 +27,13 @@ public class RefreshTokenService {
         UserInfo userInfoExtreacted = userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found with username: " + username));
 
-        RefreshToken refreshToken = RefreshToken.builder()
-                .userInfo(userInfoExtreacted)
-                .token(UUID.randomUUID().toString())
-                .expiryDate(Instant.now().plusMillis(600000))
-                .build();
+        RefreshToken refreshToken = refreshTokenRepository
+                .findByUserInfo(userInfoExtreacted)
+                .orElse(new RefreshToken());
+
+        refreshToken.setUserInfo(userInfoExtreacted);
+        refreshToken.setToken(UUID.randomUUID().toString());
+        refreshToken.setExpiryDate(Instant.now().plusMillis(600000));
           return refreshTokenRepository.save(refreshToken);
 
     }

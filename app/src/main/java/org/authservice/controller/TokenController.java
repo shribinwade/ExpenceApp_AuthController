@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.awt.print.Printable;
+
 @RestController
 @RequestMapping("auth/v1")
 public class TokenController {
@@ -51,6 +53,7 @@ public class TokenController {
                 .map(refreshTokenService::verifyExpiration)
                 .map(RefreshToken::getUserInfo)
                 .map(userInfo -> {
+                    System.out.print(userInfo);
                     String accessToken = jwtService.GenerateToken(userInfo.getUsername());
                     return JwtResponseDTO.builder().accessToken(accessToken).token(refreshTokenRequestDTO.getToken()).build();
                 })
