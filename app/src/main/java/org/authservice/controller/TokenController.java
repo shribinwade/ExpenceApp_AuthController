@@ -52,7 +52,7 @@ public class TokenController {
                 .map(RefreshToken::getUserInfo)
                 .map(userInfo -> {
                     String accessToken = jwtService.GenerateToken(userInfo.getUsername());
-                   return JwtResponseDTO.builder().accessToken(accessToken).token(refreshTokenRequestDTO.getToken()).build();
+                    return JwtResponseDTO.builder().accessToken(accessToken).token(refreshTokenRequestDTO.getToken()).build();
                 })
                 .orElseThrow(()-> new RuntimeException("Refresh Token is not in DB ..!!"));
     }

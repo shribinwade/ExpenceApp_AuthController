@@ -4,7 +4,6 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/AuthService.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/AuthService.app.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/expenseservice.main.iml" filepath="$PROJECT_DIR$/.idea/modules/expenseservice.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/expenseservice.test.iml" filepath="$PROJECT_DIR$/.idea/modules/expenseservice.test.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/userservice.main.iml" filepath="$PROJECT_DIR$/.idea/modules/userservice.main.iml" />
     </modules>
   </component>

@@ -8,6 +8,8 @@ import org.authservice.models.UserInfoDTO;
 import org.authservice.response.JwtResponseDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -39,6 +41,18 @@ public class AuthController {
           }catch (Exception ex){
               return new ResponseEntity<>("Exception in User Service",HttpStatus.INTERNAL_SERVER_ERROR);
           }
+    }
+
+    @GetMapping("/ping")
+    public ResponseEntity<String> ping (){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if(authentication != null && authentication.isAuthenticated()){
+            return ResponseEntity.ok("Pong");
+        }else{
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unthorized");
+        }
+
     }
 
 
