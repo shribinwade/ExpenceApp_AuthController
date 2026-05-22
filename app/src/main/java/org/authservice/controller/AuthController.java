@@ -10,22 +10,27 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Objects;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("auth/v1")
 public class AuthController {
 
+    private final UserDetailsService userDetailsService;
     private JwtService jwtService;
     private RefreshTokenService refreshTokenService;
     private UserDetailsServiceImpl userDetailsServiceImpl;
 
 
-    public AuthController(JwtService jwtService, RefreshTokenService refreshTokenService, UserDetailsServiceImpl userDetailsServiceImpl) {
+    public AuthController(JwtService jwtService, RefreshTokenService refreshTokenService, UserDetailsServiceImpl userDetailsServiceImpl, UserDetailsService userDetailsService) {
         this.jwtService = jwtService;
         this.refreshTokenService = refreshTokenService;
         this.userDetailsServiceImpl = userDetailsServiceImpl;
+        this.userDetailsService = userDetailsService;
     }
 
     @PostMapping("/signup")
@@ -46,14 +51,13 @@ public class AuthController {
     @GetMapping("/ping")
     public ResponseEntity<String> ping (){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
         if(authentication != null && authentication.isAuthenticated()){
-            return ResponseEntity.ok("Pong");
-        }else{
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unthorized");
+            String userId = userDetailsServiceImpl.getUserByUsername(authentication.getName());
+            if(Objects.nonNull(userId)){
+                return ResponseEntity.ok(userId);
+            }
         }
-
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("unthorized");
     }
-
 
 }

@@ -6,6 +6,7 @@ import org.authservice.entities.RefreshToken;
 import org.authservice.entities.UserInfo;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.time.Instant;
 import java.util.Optional;
 import java.util.UUID;
@@ -33,7 +34,7 @@ public class RefreshTokenService {
 
         refreshToken.setUserInfo(userInfoExtreacted);
         refreshToken.setToken(UUID.randomUUID().toString());
-        refreshToken.setExpiryDate(Instant.now().plusMillis(600000));
+        refreshToken.setExpiryDate(Instant.now().plus(Duration.ofDays(7)));
           return refreshTokenRepository.save(refreshToken);
 
     }

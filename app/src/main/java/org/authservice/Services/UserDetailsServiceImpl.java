@@ -43,6 +43,15 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         return new CustomUserDetails(user.get());
     }
 
+
+    public String getUserByUsername(String username) throws UsernameNotFoundException {
+        Optional<UserInfo> user = userRepository.findByUsername(username);
+        if(user.isEmpty()){
+            throw new UsernameNotFoundException("could not found user...!!");
+        }
+        return user.get().getUserId();
+    }
+
     public Optional<UserInfo> checkIfUserAlreadyExists(UserInfoDTO userInfoDTO){
        return userRepository.findByUsername(userInfoDTO.getUsername());
 
