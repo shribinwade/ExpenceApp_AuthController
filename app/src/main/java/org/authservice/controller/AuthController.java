@@ -13,6 +13,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
 import java.util.Objects;
 
 @CrossOrigin(origins = "*")
@@ -49,7 +50,7 @@ public class AuthController {
     }
 
     @GetMapping("/ping")
-    public ResponseEntity<String> ping (){
+    public ResponseEntity<?> ping (){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if(authentication != null && authentication.isAuthenticated()){
             String userId = userDetailsServiceImpl.getUserByUsername(authentication.getName());
@@ -57,7 +58,7 @@ public class AuthController {
                 return ResponseEntity.ok(userId);
             }
         }
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("unthorized");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized");
     }
 
 }
